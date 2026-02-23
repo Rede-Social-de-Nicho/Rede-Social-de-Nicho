@@ -10,8 +10,8 @@ public class MainViewController {
 
     @GetMapping()
     public String paginaPrincipal() {
-        // O Spring vai procurar por "index.html" dentro de src/main/resources/templates
         return "index"; 
     }
 
 }
+
