@@ -15,3 +15,5 @@ Um Usuário pode "Favoritar" Receitas de outros usuários, adicionando-as a uma 
 Um Usuário pode deixar uma Avaliação (ex: 1 a 5 estrelas) em uma Receita.
 Lógica de Voto Único: A API deve impedir que o mesmo Usuário avalie a mesma Receita múltiplas vezes.
 A API deve calcular e exibir a média de avaliações de cada Receita.
+
+[Clique aqui para ver o código da página Home (index.html)](webdev/src/main/resources/templates/index.html)
