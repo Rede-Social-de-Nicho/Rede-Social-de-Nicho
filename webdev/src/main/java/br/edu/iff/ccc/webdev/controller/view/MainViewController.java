@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/home")
 public class MainViewController {
 
     @GetMapping()
@@ -13,4 +13,5 @@ public class MainViewController {
         // O Spring vai procurar por "index.html" dentro de src/main/resources/templates
         return "index"; 
     }
+
 }
