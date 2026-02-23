@@ -17,3 +17,4 @@ Lógica de Voto Único: A API deve impedir que o mesmo Usuário avalie a mesma R
 A API deve calcular e exibir a média de avaliações de cada Receita.
 
 
+
