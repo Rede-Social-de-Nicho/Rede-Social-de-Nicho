@@ -12,6 +12,4 @@ public class MainViewController {
     public String paginaPrincipal() {
         return "index"; 
     }
-
 }
-
