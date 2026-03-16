@@ -45,6 +45,72 @@ Voto Único: O sistema impede que um usuário avalie a mesma receita mais de uma
 
 Herança de Usuários: Diferenciação entre usuários comuns e administradores através de @Inheritance no JPA.
 
+🧪 Guia de Testes da API
+
+Para testar o sistema, utilize o Insomnia seguindo a ordem abaixo. É necessário criar o Usuário primeiro, pois a Receita depende de um ID de autor válido.
+
+1. Contexto de Usuários (User Management)
+   
+A. Criar Novo Usuário (POST)
+
+Endpoint: http://localhost:8081/api/usuarios
+
+Descrição: Cadastra um novo perfil no sistema.
+
+Exemplo de Chamada (JSON):
+
+{
+
+  "nomeUsuario": "Kelryn Ramos",
+  
+  "email": "kelryn@email.com",
+  
+  "senhaHash": "senha123",
+  
+  "eAdm": false
+  
+}
+
+B. Listar Todos os Usuários (GET)
+
+Endpoint: http://localhost:8081/api/usuarios
+
+Descrição: Retorna a lista de todos os usuários (incluindo o Marvin criado automaticamente).
+
+C. Deletar Usuário (DELETE)
+
+Endpoint: http://localhost:8081/api/usuarios/{id}
+
+Descrição: Remove um usuário. Retorna 204 No Content em caso de sucesso.
+
+2. Contexto de Receitas (Recipe Management)
+   
+A. Criar Nova Receita (POST)
+
+Endpoint: http://localhost:8081/api/receitas
+
+Descrição: Publica uma receita vinculada a um autor.
+
+Exemplo de Chamada (JSON):
+
+{
+
+  "titulo": "Torta de Limão Especial",
+  
+  "ingredientes": "Leite condensado, limão, biscoito, manteiga.",
+  
+  "passoApasso": "Triture a bolacha, faça a base, adicione o mousse e resfrie.",
+  
+  "autorId": 1
+  
+}
+
+B. Listar Todas as Receitas (GET)
+
+Endpoint: http://localhost:8081/api/receitas
+
+Descrição: Retorna todas as receitas postadas no sistema, com os dados dos respectivos autores.
+
 Próximos Passos (To-do):
 
 [ ] Implementar autenticação de usuários.
