@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Página Inicial')}"></head>
+
+<body>
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main>
+        <h2>Bem-vindo(a)!</h2>
+        <p>Selecione uma opção no menu acima para começar a navegar pelas receitas.</p>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
