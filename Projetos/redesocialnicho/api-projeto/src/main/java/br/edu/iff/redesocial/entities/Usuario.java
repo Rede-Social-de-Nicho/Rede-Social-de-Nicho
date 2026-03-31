@@ -22,16 +22,16 @@ public class Usuario {
     private boolean eAdm;
 
     // Relacionamentos vindos do diagrama
-    @OneToMany(mappedBy = "autor") // "autor" é o nome do atributo na classe Receita que referencia o Usuário.
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true) // "autor" é o nome do atributo na classe Receita que referencia o Usuário.
     private List<Receita> receitas; // Um usuário pode criar várias receitas.
 
-    @OneToMany(mappedBy = "usuario") // "usuario" é o nome do atributo na classe ColecaoPessoal que referencia o Usuário.
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) // "usuario" é o nome do atributo na classe ColecaoPessoal que referencia o Usuário.
     private List<ColecaoPessoal> colecoes; // Um usuário pode ter várias coleções pessoais.
 
-    @OneToMany(mappedBy = "usuario") // "usuario" é o nome do atributo na classe Comentario que referencia o Usuário.
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) // "usuario" é o nome do atributo na classe Comentario que referencia o Usuário.
     private List<Comentario> comentarios; // Um usuário pode fazer vários comentários.
 
-    @OneToMany(mappedBy = "usuario") // "usuario" é o nome do atributo na classe Avaliacao que referencia o Usuário.
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) // "usuario" é o nome do atributo na classe Avaliacao que referencia o Usuário.
     private List<Avaliacao> avaliacoes; // Um usuário pode fazer várias avaliações.
 
     // Getters e Setters

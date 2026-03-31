@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(${usuario.id == null ? 'Cadastrar Usuário' : 'Editar Usuário'})}"></head>
+
+<body>
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main>
+        <h2 th:text="${usuario.id == null ? 'Cadastrar Novo Usuário' : 'Editar Usuário'}">Cadastrar Usuário</h2>
+        
+        <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="POST" style="max-width: 400px; margin: 0 auto; text-align: left; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+            
+            <input type="hidden" th:field="*{id}">
+            
+            <div style="margin-bottom: 15px;">
+                <label for="nomeUsuario" style="display: block; font-weight: bold;">Nome de Usuário:</label>
+                <input type="text" id="nomeUsuario" th:field="*{nomeUsuario}" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label for="email" style="display: block; font-weight: bold;">E-mail:</label>
+                <input type="email" id="email" th:field="*{email}" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label for="senhaHash" style="display: block; font-weight: bold;">Senha:</label>
+                <input type="password" id="senhaHash" th:field="*{senhaHash}" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: bold;">
+                    <input type="checkbox" th:field="*{eAdm}"> É Administrador?
+                </label>
+            </div>
+
+            <div style="text-align: center;">
+                <button type="submit" style="background-color: #ff7e5f; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px;">Salvar Usuário</button>
+                <a th:href="@{/usuarios/lista}" style="margin-left: 10px; text-decoration: none; color: #333;">Cancelar</a>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Lista de Usuários')}"></head>
+
+<body>
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main>
+        <h2>Usuários Cadastrados</h2>
+        
+        <div style="margin-bottom: 20px; text-align: center;">
+            <a th:href="@{/usuarios/novo}" style="background-color: #4CAF50; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold;">+ Novo Usuário</a>
+        </div>
+        
+        <table border="1" style="margin: 0 auto; width: 80%; text-align: left; border-collapse: collapse;">
+            <thead style="background-color: #ff7e5f; color: white;">
+                <tr>
+                    <th style="padding: 10px;">ID</th>
+                    <th style="padding: 10px;">Nome de Usuário</th>
+                    <th style="padding: 10px;">E-mail</th>
+                    <th style="padding: 10px;">Administrador?</th>
+                    <th style="padding: 10px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="usuario : ${listaDeUsuarios}">
+                    <td style="padding: 10px;" th:text="${usuario.id}">1</td>
+                    <td style="padding: 10px;" th:text="${usuario.nomeUsuario}">Nome Padrão</td>
+                    <td style="padding: 10px;" th:text="${usuario.email}">email@padrao.com</td>
+                    <td style="padding: 10px;" th:text="${usuario.eAdm} ? 'Sim' : 'Não'">Sim/Não</td>
+                    
+                    <td style="padding: 10px; text-align: center;">
+                        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" 
+                           style="color: white; background-color: #2196F3; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 14px; margin-right: 5px;">
+                           Editar
+                        </a>
+                        
+                        <a th:href="@{/usuarios/deletar/{id}(id=${usuario.id})}" 
+                           style="color: white; background-color: #f44336; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 14px;"
+                           onclick="return confirm('Tem certeza que deseja excluir este usuário?');">
+                           Excluir
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(listaDeUsuarios)}">
+                    <td colspan="5" style="text-align: center; padding: 20px;">Nenhum usuário cadastrado ainda.</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

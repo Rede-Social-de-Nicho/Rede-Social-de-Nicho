@@ -30,7 +30,7 @@ public class Receita {
     @ManyToMany(mappedBy = "receitas") // Muitas receitas podem estar em muitas coleções pessoais.
     private List<ColecaoPessoal> colecoes; 
 
-    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL) 
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true) 
     // Uma receita pode ter muitos comentários. CascadeType.ALL garante que, ao deletar uma receita, os comentários tambem sejam.
     private List<Avaliacao> avaliacoes;
 
