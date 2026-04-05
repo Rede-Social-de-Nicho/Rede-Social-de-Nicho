@@ -1,0 +1,43 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    
+    /* A mágica definitiva para o Footer: */
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #ff7e5f;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+main {
+    flex: 1; 
+    width: 100%; /* Força a ocupar a largura toda horizontalmente */
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    padding: 20px;
+    text-align: center;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    width: 100%;
+    margin-top: auto; /* Empurra o footer para o limite inferior */
+}

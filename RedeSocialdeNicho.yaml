@@ -1,0 +1,321 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Rede Social de Nicho
+meta:
+  id: wrk_b4b821747bf84cb4b84dcf3ed6483e78
+  created: 1773661385426
+  modified: 1773661385426
+  description: ""
+collection:
+  - url: http://localhost:8081/api/receitas
+    name: Cadastrar Receita
+    meta:
+      id: req_6a93f60e5b5f40a9be9348a560cb7086
+      created: 1773661538623
+      modified: 1773662849907
+      isPrivate: false
+      description: ""
+      sortKey: -1773661538623
+    method: POST
+    body:
+      mimeType: application/json
+      text: >-
+        {
+          "titulo": "Bolo de Laranja",
+          "ingredientes": "3 cenouras, 3 ovos, 1 xícara de óleo, 2 xícaras de açúcar",
+          "passoApasso": "Bater tudo no liquidificador e assar por 40 minutos.",
+          "autorId": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/receitas
+    name: Listar Receitas
+    meta:
+      id: req_e0e7d134b1ee46ad9dde5db9c8c57764
+      created: 1773662050749
+      modified: 1773662660931
+      isPrivate: false
+      description: ""
+      sortKey: -1773662050749
+    method: GET
+    body:
+      mimeType: application/json
+      text: ""
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/receitas/1
+    name: Testar Atualização
+    meta:
+      id: req_977cc203b90a4ff49a9afda2771900cb
+      created: 1773662277260
+      modified: 1773662355221
+      isPrivate: false
+      description: ""
+      sortKey: -1773662277261
+    method: PUT
+    body:
+      mimeType: application/json
+      text: >-
+        {
+          "titulo": "Bolo de Cenoura Especial do Marvin",
+          "ingredientes": "Cenouras, ovos, óleo, açúcar e cobertura de chocolate",
+          "passoApasso": "Bater no liquidificador e adicionar cobertura no final.",
+          "autorId": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/receitas/1
+    name: Teste de Exclusão
+    meta:
+      id: req_4ca95ff11d704f8e842afa92792b9327
+      created: 1773662435885
+      modified: 1773662450120
+      isPrivate: false
+      description: ""
+      sortKey: -1773662435885
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/receitas
+    name: Teste de Erros
+    meta:
+      id: req_8d1e4f3851534b00bfa48eb13a12c209
+      created: 1773662473805
+      modified: 1773662494935
+      isPrivate: false
+      description: ""
+      sortKey: -1773662473805
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "ingredientes": "Teste",
+          "passoApasso": "Teste",
+          "autorId": 1
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/receitas/1
+    name: Busca por ID
+    meta:
+      id: req_0c9584d3f8cc4557b99242b169df1731
+      created: 1773662579623
+      modified: 1773662597205
+      isPrivate: false
+      description: ""
+      sortKey: -1773662579623
+    method: GET
+    body:
+      mimeType: application/json
+      text: ""
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/usuarios
+    name: Cadastrar Usuario
+    meta:
+      id: req_44d05e1521144e13b0ad193185a4ddf0
+      created: 1773697029847
+      modified: 1773697282843
+      isPrivate: false
+      description: ""
+      sortKey: -1773697029847
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "nomeUsuario": "Kelryn Ramos",
+          "email": "kelryn@email.com",
+          "senhaHash": "senhaSegura123",
+          "eAdm": false
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/usuarios
+    name: Listar Usuarios
+    meta:
+      id: req_486c87a8ebf446039b0a44dc7b094e8b
+      created: 1773697074117
+      modified: 1773697265383
+      isPrivate: false
+      description: ""
+      sortKey: -1773697074117
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/receitas
+    name: Cadastrar Receita Nova
+    meta:
+      id: req_8db5c9794cbe482997b0e5cf26c51688
+      created: 1773697095764
+      modified: 1773697246568
+      isPrivate: false
+      description: ""
+      sortKey: -1773697095764
+    method: POST
+    body:
+      mimeType: application/json
+      text: >-
+        {
+          "titulo": "Torta de Limão da Kelryn",
+          "ingredientes": "Bolacha, manteiga, leite condensado e limão.",
+          "passoApasso": "Triture a bolacha, faça a base e cubra com o creme de limão.",
+          "autorId": 2
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8081/api/usuarios/2
+    name: Deletar Usuario
+    meta:
+      id: req_3c6b97599631427cbd260957bcfb3590
+      created: 1773697140324
+      modified: 1773697227929
+      isPrivate: false
+      description: ""
+      sortKey: -1773697140324
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: ""
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_63f873670201a79848ca898b6220f27297adea80
+    created: 1773661385450
+    modified: 1773661385450
+environments:
+  name: Base Environment
+  meta:
+    id: env_63f873670201a79848ca898b6220f27297adea80
+    created: 1773661385440
+    modified: 1773661385440
+    isPrivate: false

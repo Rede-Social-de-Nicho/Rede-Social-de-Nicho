@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Página Não Encontrada')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+    <main>
+        <h1 style="color: #ff7e5f; font-size: 50px;">404</h1>
+        <h2>Ops! Não encontramos o que você procurava.</h2>
+        <p>A página que você tentou acessar não existe ou foi movida.</p>
+        <br>
+        <a th:href="@{/receitas/lista}" style="padding: 10px 20px; background-color: #ff7e5f; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Início</a>
+    </main>
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
