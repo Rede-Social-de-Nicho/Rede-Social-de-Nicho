@@ -1,7 +1,5 @@
 package br.edu.iff.redesocial.service;
 
-import br.edu.iff.redesocial.dto.AvaliacaoRequestDTO;
-import br.edu.iff.redesocial.dto.AvaliacaoResponseDTO;
 import br.edu.iff.redesocial.entities.Avaliacao;
 import br.edu.iff.redesocial.entities.Receita;
 import br.edu.iff.redesocial.entities.Usuario;
@@ -9,61 +7,46 @@ import br.edu.iff.redesocial.repository.AvaliacaoRepository;
 import br.edu.iff.redesocial.repository.ReceitaRepository;
 import br.edu.iff.redesocial.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional; 
+
+import java.util.List;
 
 @Service
-public class AvaliacaoService {
+public class AvaliacaoService { // Esta classe é responsável por gerenciar as avaliações feitas pelos usuários nas receitas,
+                            // incluindo a lógica de negócio para salvar avaliações e calcular a média de avaliações das receitas.
 
-    @Autowired // Inserir os repositórios para acesso aos dados do banco. 
-    private AvaliacaoRepository avaliacaoRepository;
+    @Autowired private AvaliacaoRepository avaliacaoRepository;
+    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired private ReceitaRepository receitaRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    public List<Avaliacao> listarTodas() {
+        return avaliacaoRepository.findAll();
+    }
 
-    @Autowired
-    private ReceitaRepository receitaRepository;
-
-    public AvaliacaoResponseDTO criar(AvaliacaoRequestDTO dto) {
+    @Transactional // Isso garante que a lista de avaliações não venha vazia.
+    public void salvarAvaliacao(Long usuarioId, Long receitaId, Integer estrelas) {
         
-        // Busca o Usuário no banco de dados.
-        Usuario usuario = usuarioRepository.findById(dto.usuarioId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        if (avaliacaoRepository.existsByUsuarioIdAndReceitaId(usuarioId, receitaId)) {
+            throw new IllegalArgumentException("Erro: Você já avaliou esta receita!");
+        }
 
-        // Busca a Receita no banco de dados.
-        Receita receita = receitaRepository.findById(dto.receitaId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receita não encontrada"));
-                // Verifica se o usuário já avaliou a receita.
-                if (avaliacaoRepository.existsByUsuarioIdAndReceitaId(dto.usuarioId(), dto.receitaId())) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Você já avaliou esta receita!");
-                    // Verificação para garantir que a avaliação tenha entre 1 e 5 estrelas e o ID válido.
-                }
+        // Busca o usuário e a receita no banco de dados usando os IDs fornecidos. Se algum deles não for encontrado, uma exceção será lançada.
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+        Receita receita = receitaRepository.findById(receitaId)
+                .orElseThrow(() -> new IllegalArgumentException("Receita não encontrada."));
 
-        // Monta a Entidade, transformando o DTO em Objeto do BD. 
-        Avaliacao avaliacao = new Avaliacao();
-        avaliacao.setEstrelas(dto.estrelas());
+        Avaliacao avaliacao = new Avaliacao(); // Cria uma nova instância de Avaliação e define o usuário, a receita e a quantidade de estrelas da avaliação.
         avaliacao.setUsuario(usuario);
         avaliacao.setReceita(receita);
-        // A dataAvaliacao já é preenchida automaticamente pela entidade.
+        avaliacao.setEstrelas(estrelas);
 
-        // Salvar no BD. 
+        // Salva a avaliação no banco de dados e associa a avaliação à receita. Em seguida, recalcula a média de avaliações da receita e salva as alterações.
         Avaliacao avaliacaoSalva = avaliacaoRepository.save(avaliacao);
 
-        // Atualiza a média da receita
-        receita.getAvaliacoes().add(avaliacaoSalva);
-        receita.calcularMediaAval();
-        receitaRepository.save(receita);
-
-        // Retorna o DTO de Resposta.
-        return new AvaliacaoResponseDTO(
-                avaliacaoSalva.getId(),
-                avaliacaoSalva.getEstrelas(),
-                avaliacaoSalva.getDataAvaliacao(),
-                usuario.getId(),
-                usuario.getNomeUsuario(), // Pegando o nome direto da entidade Usuário encontrada
-                receita.getId(),
-                receita.getTitulo() // Pegando o título direto da entidade Receita encontrada
-        );
+        receita.getAvaliacoes().add(avaliacaoSalva); // Adiciona a avaliação à lista de avaliações da receita.
+        receita.calcularMediaAval(); // Recalcula a média de avaliações da receita com base na nova avaliação adicionada.
+        receitaRepository.save(receita); // Salva as alterações na receita, incluindo a nova média de avaliações.
     }
 }

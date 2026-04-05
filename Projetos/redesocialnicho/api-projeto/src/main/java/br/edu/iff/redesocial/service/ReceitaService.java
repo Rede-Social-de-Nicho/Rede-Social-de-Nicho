@@ -33,8 +33,8 @@ public class ReceitaService {
         Receita receita = new Receita(); // Cria um novo objeto Receita e preenche com os dados do DTO e do autor encontrado.
         receita.setTitulo(dto.titulo()); // O titulo da receita é definido a partir do DTO recebido.
         receita.setIngredientes(dto.ingredientes()); // Os ingredientes da receita são definidos a partir do DTO recebido.
-        receita.setPassoApasso(dto.passoApasso()); 
-        receita.setAutor(autor);
+        receita.setPassoApasso(dto.passoApasso());  // O passo a passo da receita é definido a partir do DTO recebido.
+        receita.setAutor(autor); // O autor da receita é definido com o usuário encontrado no banco de dados usando o ID fornecido no DTO.
 
         Receita receitaSalva = receitaRepository.save(receita);
         return converterParaDTO(receitaSalva);

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class ApiProjetoApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ApiProjetoApplication.class, args);
     }
@@ -18,17 +17,19 @@ public class ApiProjetoApplication {
     @Bean
     public CommandLineRunner initDatabase(UsuarioRepository usuarioRepository) {
         return args -> {
-            // Verifica se o banco está vazio. Se estiver, cria o autor ID 1.
+            // Verifica se o banco está vazio. Se estiver, cria o autor Administrador.
             if (usuarioRepository.count() == 0) {
                 Usuario autor = new Usuario();
-                autor.setNomeUsuario("Marvin Ramos");
-                autor.setEmail("marvin@iff.edu.br");
+                autor.setNomeUsuario("Administrador");
+                autor.setEmail("administrador@iff.edu.br");
                 autor.setSenhaHash("123456");
-                autor.seteAdm(true);
+                
+                autor.setEAdm(true);
 
                 usuarioRepository.save(autor);
+
                 System.out.println("=====================================================");
-                System.out.println("✅ USUÁRIO AUTOR (ID 1) CRIADO AUTOMATICAMENTE!");
+                System.out.println("USUARIO AUTOR CRIADO AUTOMATICAMENTE!");
                 System.out.println("=====================================================");
             }
         };

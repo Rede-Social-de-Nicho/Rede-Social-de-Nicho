@@ -2,7 +2,7 @@
 
 package br.edu.iff.redesocial.dto;
 
-public record ReceitaResponseDTO(
+public record ReceitaResponseDTO( 
     Long id,
     String titulo,
     String ingredientes,

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detalhes da Receita')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+    
+    <main style="max-width: 800px; margin: 20px auto; font-family: Arial, sans-serif;">
+        
+        <div th:if="${mensagem}" style="padding: 15px; background: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 20px;" th:text="${mensagem}"></div>
+        <div th:if="${mensagemErro}" style="padding: 15px; background: #f8d7da; color: #721c24; border-radius: 5px; margin-bottom: 20px;" th:text="${mensagemErro}"></div>
+
+        <div style="border: 1px solid #ff7e5f; padding: 20px; border-radius: 10px; background: white; text-align: center;">
+            <h1 th:text="${receita.titulo}" style="color: #ff7e5f; margin-bottom: 5px;"></h1>
+            <p><strong>Autor:</strong> <span th:text="${receita.autor.nomeUsuario}"></span></p>
+            
+            <hr style="border-top: 1px solid #ccc; margin: 20px 0;">
+            
+            <h3 style="color: #333;">Ingredientes:</h3>
+            <p style="white-space: pre-line; text-align: left; display: inline-block; width: 80%;" th:text="${receita.ingredientes}"></p>
+            
+            <hr style="border-top: 2px dashed #ff7e5f; margin: 30px 0;">
+            
+            <h3 style="color: #333;">Modo de Preparo:</h3>
+            <p style="white-space: pre-line; text-align: left; display: inline-block; width: 80%;" th:text="${receita.passoApasso}"></p>
+        </div>
+
+        <div style="margin-top: 30px; background: #fff3f0; padding: 20px; border-radius: 10px; border: 1px dashed #ff7e5f;">
+            <h3>Avalie esta receita</h3>
+            <form th:action="@{/avaliacoes/salvar}" method="post">
+                <input type="hidden" name="receitaId" th:value="${receita.id}">
+                <div style="margin-bottom: 10px;">
+                    <label>Seu Usuário:</label><br>
+                    <select name="usuarioId" required style="width: 100%; padding: 8px;">
+                        <option value="">Selecione...</option>
+                        <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nomeUsuario}"></option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <label>Nota (1 a 5):</label><br>
+                    <input type="number" name="estrelas" min="1" max="5" required style="padding: 8px;">
+                </div>
+                <button type="submit" style="background: #ff7e5f; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer;">Enviar Avaliação</button>
+            </form>
+        </div>
+
+        <div style="margin-top: 30px; border-top: 2px dashed #ccc; padding-top: 20px;">
+            <h3 style="color: #ff7e5f; text-align: left;">Comentários</h3>
+
+            <div th:if="${#lists.isEmpty(receita.comentarios)}" style="color: #777; font-style: italic; text-align: left; margin-bottom: 20px;">
+                Nenhum comentário ainda. Seja o primeiro a comentar!
+            </div>
+
+            <div th:each="c : ${receita.comentarios}" style="background-color: white; border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 10px; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                <strong style="color: #333;" th:text="${c.usuario.nomeUsuario}">Usuário</strong>
+                <span style="color: #999; font-size: 0.8em; margin-left: 10px;" th:text="${#temporals.format(c.dataCriacao, 'dd/MM/yyyy HH:mm')}">Data</span>
+                <p style="margin-top: 10px; color: #555; white-space: pre-line;" th:text="${c.texto}">Texto do comentário</p>
+            </div>
+
+            <div style="background-color: #fff5f2; padding: 20px; border-radius: 8px; border: 1px solid #ffceb8; margin-top: 20px; text-align: left;">
+                <h4 style="margin-top: 0; color: #333;">Deixe seu comentário:</h4>
+                
+                <form th:action="@{/receitas/comentar/{id}(id=${receita.id})}" method="post" style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <label style="font-weight: bold; font-size: 0.9em; color: #555;">Seu Usuário:</label>
+                        <select name="autorId" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                            <option value="">Selecione quem está comentando...</option>
+                            <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nomeUsuario}"></option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label style="font-weight: bold; font-size: 0.9em; color: #555;">Comentário:</label>
+                        <textarea name="texto" rows="3" required placeholder="O que você achou dessa receita? Pode usar enter para quebrar as linhas!" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"></textarea>
+                    </div>
+                    
+                    <button type="submit" style="background-color: #ff7e5f; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; align-self: flex-start; margin-top: 5px;">Enviar Comentário</button>
+                </form>
+            </div>
+        </div>
+
+        <br><br>
+        <a th:href="@{/receitas/lista}" style="color: #ff7e5f; text-decoration: none; font-weight: bold;">← Voltar para a lista</a>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

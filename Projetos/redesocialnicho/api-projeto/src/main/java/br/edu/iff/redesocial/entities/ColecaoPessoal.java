@@ -13,7 +13,7 @@ public class ColecaoPessoal {
 
     private String nomeColecao;
 
-    private LocalDateTime dataColecao = LocalDateTime.now();
+    private LocalDateTime dataColecao = LocalDateTime.now(); // Armazena a data e hora de criação da coleção pessoal, facilitando o controle e ordenação das coleções.
 
     @ManyToOne // Muitas coleções pessoais podem pertencer a um único usuário.
     @JoinColumn(name = "usuario_id") 
@@ -28,8 +28,7 @@ public class ColecaoPessoal {
     )
     // Define a tabela de junção "colecao_receita" para a relação ManyToMany entre ColecaoPessoal e Receita.
     private List<Receita> receitas;
-
-    // Getters e Setters.
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

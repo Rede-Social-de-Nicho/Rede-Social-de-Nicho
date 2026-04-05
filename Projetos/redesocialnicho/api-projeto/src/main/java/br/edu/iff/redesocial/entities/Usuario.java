@@ -22,19 +22,18 @@ public class Usuario {
     private boolean eAdm;
 
     // Relacionamentos vindos do diagrama
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true) // "autor" é o nome do atributo na classe Receita que referencia o Usuário.
-    private List<Receita> receitas; // Um usuário pode criar várias receitas.
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Receita> receitas; 
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) // "usuario" é o nome do atributo na classe ColecaoPessoal que referencia o Usuário.
-    private List<ColecaoPessoal> colecoes; // Um usuário pode ter várias coleções pessoais.
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) 
+    private List<ColecaoPessoal> colecoes; 
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) // "usuario" é o nome do atributo na classe Comentario que referencia o Usuário.
-    private List<Comentario> comentarios; // Um usuário pode fazer vários comentários.
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) 
+    private List<Comentario> comentarios; 
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) // "usuario" é o nome do atributo na classe Avaliacao que referencia o Usuário.
-    private List<Avaliacao> avaliacoes; // Um usuário pode fazer várias avaliações.
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true) 
+    private List<Avaliacao> avaliacoes; 
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
@@ -50,6 +49,6 @@ public class Usuario {
     public LocalDateTime getDataCriacao() { return dataCriacao; }
     public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
     
-    public boolean iseAdm() { return eAdm; }
-    public void seteAdm(boolean eAdm) { this.eAdm = eAdm; }
+    public boolean isEAdm() { return eAdm; }
+    public void setEAdm(boolean eAdm) { this.eAdm = eAdm; }
 }

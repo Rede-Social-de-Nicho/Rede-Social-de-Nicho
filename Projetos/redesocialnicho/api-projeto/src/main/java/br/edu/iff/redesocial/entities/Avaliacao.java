@@ -1,38 +1,31 @@
 package br.edu.iff.redesocial.entities;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(uniqueConstraints = {
-    // Garante que a combinação Usuário + Receita não se repita no banco, ou seja, seja única.
+@Table(uniqueConstraints = { // Garante que um usuário só possa avaliar uma receita uma vez, evitando avaliações duplicadas.
     @UniqueConstraint(columnNames = {"usuario_id", "receita_id"})
 })
 public class Avaliacao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Chave primária da tabela Avaliação, auto-increment pelo BD.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Gera um ID único para cada avaliação, facilitando a identificação e manipulação das avaliações no banco de dados.
     private Long id;
 
-    private Integer estrelas; // mínimo 1, máximo 5, representando a avaliação dada pelo usuário à receita.
-    private LocalDateTime dataAvaliacao = LocalDateTime.now(); // Armazena a data e hora em que a avaliação foi feita.
+    private Integer estrelas; // Armazena a quantidade de estrelas (1 a 5) que o usuário atribuiu à receita.
+    private LocalDateTime dataAvaliacao = LocalDateTime.now();
 
     @ManyToOne
-    // Muitas avaliações podem ser feitas por um único usuário.
-
-    @JoinColumn(name = "usuario_id")
-    // Define a coluna "usuario_id" na tabela Avaliação. Chave estrangeira que referencia a tabela Usuário.
-
+    @JoinColumn(name = "usuario_id") // Define a chave estrangeira para a tabela de usuários, indicando qual usuário fez a avaliação.
     private Usuario usuario;
 
     @ManyToOne
-    // Muitas avaliações podem ser feitas para uma única receita.
-
-    @JoinColumn(name = "receita_id")
-    // Define a coluna "receita_id" na tabela Avaliação. Chave estrangeira que referencia a tabela Receita.
-    
+    @JoinColumn(name = "receita_id") // Define a chave estrangeira para a tabela de receitas, indicando qual receita foi avaliada.
     private Receita receita;
 
-    // Getters e Setters
+    public Avaliacao() {}
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Integer getEstrelas() { return estrelas; }
@@ -41,9 +34,6 @@ public class Avaliacao {
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
     public Receita getReceita() { return receita; }
     public void setReceita(Receita receita) { this.receita = receita; }
-    public LocalDateTime getDataAvaliacao() {
-    return dataAvaliacao; }
-    public void setDataAvaliacao(LocalDateTime dataAvaliacao) {
-    this.dataAvaliacao = dataAvaliacao; }
-    
+    public LocalDateTime getDataAvaliacao() { return dataAvaliacao; }
+    public void setDataAvaliacao(LocalDateTime dataAvaliacao) { this.dataAvaliacao = dataAvaliacao; }
 }

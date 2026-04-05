@@ -1,57 +1,108 @@
 package br.edu.iff.redesocial.controller;
 
-import br.edu.iff.redesocial.dto.ReceitaRequestDTO;
-import br.edu.iff.redesocial.dto.ReceitaResponseDTO;
+import br.edu.iff.redesocial.entities.Receita;
+import br.edu.iff.redesocial.repository.ReceitaRepository;
+import br.edu.iff.redesocial.repository.UsuarioRepository;
 import br.edu.iff.redesocial.service.ReceitaService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
-@RestController // Indicação de classe controladora (REST) que irá receber requisições http e retornar respostas. 
-@RequestMapping("/api/receitas") // Definimos o endereço base para acessar as informações de receita. 
+@Controller
+@RequestMapping("/receitas") // Define a rota base para todas as ações relacionadas às receitas. Todas as rotas dentro deste controlador começarão com "/receitas".
 public class ReceitaController {
 
-    @Autowired // Aqui no controlador vamos chamar a camada de serviço, onde fica a lógica de negócio.
-    private ReceitaService receitaService;
+    @Autowired private ReceitaService receitaService;
+    @Autowired private ReceitaRepository receitaRepository;
+    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired private br.edu.iff.redesocial.repository.ComentarioRepository comentarioRepository;// Injeção do repositório de comentários para salvar os comentários das receitas.
 
-    @PostMapping // Recebe dados para criar uma nova receita. 
-    public ResponseEntity<ReceitaResponseDTO> criar(@RequestBody @Valid ReceitaRequestDTO dto) {
-        // @requestBody indica que os dados virão no corpo da requisição;
-        // @valid valida as informações presentes no DTO, garantindo que os campos obrigatórios sejam válidos;
-        ReceitaResponseDTO resposta = receitaService.criar(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
-        // Retorna a resposta com o status http 201 (Criado) e o corpo contendo a receita criada.
+    // Listagem de Receitas.
+    @GetMapping("/lista") // Mapeia a rota "/receitas/lista" para este método, que será chamado quando um usuário acessar essa URL para ver a lista de receitas.
+    public String listar(Model model) {
+        // if(true) throw new RuntimeException("Simulando banco de dados fora do ar!");
+        model.addAttribute("listaDeReceitas", receitaRepository.findAll());
+        return "receitas/lista";
     }
 
-    @GetMapping // Retorna a lista de todas as receitas já cadastradas.
-    public ResponseEntity<List<ReceitaResponseDTO>> listar() {
-        return ResponseEntity.ok(receitaService.listarTodas());
-        // Retorna com o status http 200 (Ok) e no corpo a lista de receitas cadastradas.
+    // Ver detalhes e Avaliar dentro
+    @GetMapping("/detalhes/{id}") // Mapeia a rota "/receitas/detalhes/{id}" para este método, onde {id} é um parâmetro de caminho que representa o ID da receita a ser exibida.
+    public String exibirDetalhes(@PathVariable Long id, Model model) {
+        Receita receita = receitaRepository.findById(id) // Busca a receita no banco de dados pelo ID fornecido. Se a receita não for encontrada, lança uma exceção com status 404.
+                .orElseThrow(() -> new IllegalArgumentException("Receita não encontrada: " + id));
+        
+        model.addAttribute("receita", receita);
+        model.addAttribute("usuarios", usuarioRepository.findAll()); 
+        return "receitas/detalhes";
     }
 
-    @GetMapping("/{id}") // Retorna uma receita específica, identificada pelo ID.
-    public ResponseEntity<ReceitaResponseDTO> buscar(@PathVariable Long id) {
-        return ResponseEntity.ok(receitaService.buscarPorId(id));
-        // Retorna o status http 200 (Ok) e no corpo a receita cadastrada.
-        // Se não encontrar a receita a camada de serviço retornará o erro 404 informando que a receita não foi localizada. 
+    // Abre o formulário para uma nova receita
+    @GetMapping("/novo")
+    public String exibirFormularioNovo(Model model) {
+        model.addAttribute("usuarios", usuarioRepository.findAll());
+        model.addAttribute("receita", new Receita()); 
+        return "receitas/formulario"; 
     }
 
-    @PutMapping("/{id}") // Substitui os dados de uma receita existente pelas novas informações dadas. 
-    public ResponseEntity<ReceitaResponseDTO> atualizar(@PathVariable Long id, @RequestBody @Valid ReceitaRequestDTO dto) {
-        return ResponseEntity.ok(receitaService.atualizar(id, dto));
-        // Retorna o status http 200 (ok) e no corpo a receita atualizada. 
+    // Rota para editar (Busca a receita existente e preenche o formulário)
+    @GetMapping("/editar/{id}")
+    public String editarFormulario(@PathVariable Long id, Model model) {
+        Receita receita = receitaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Receita não encontrada: " + id));
+        
+        model.addAttribute("receita", receita);
+        model.addAttribute("usuarios", usuarioRepository.findAll());
+        
+        return "receitas/formulario"; 
     }
 
-    @DeleteMapping("/{id}") // Remove uma receita do sistema identificada pelo ID. 
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        receitaService.deletar(id); 
-        // A camada de serviço irá deletar a receita. 
-        // Se o ID não for encontrado retornará o erro 404 informando que não foi localizada. 
-        return ResponseEntity.noContent().build();
-        // Retorna http 204 (No content) indicando sucesso na operação, sem conteúdo no corpo. 
+    // Recebe os dados do formulário (Criação ou Edição) e salva no banco
+    @PostMapping("/salvar")
+    public String salvarReceita(@ModelAttribute Receita receita, @RequestParam Long autorId, RedirectAttributes attributes) {
+        br.edu.iff.redesocial.entities.Usuario autor = usuarioRepository.findById(autorId)
+                .orElseThrow(() -> new IllegalArgumentException("Autor inválido!"));
+        
+        receita.setAutor(autor);
+        receitaRepository.save(receita);
+        
+        // Adiciona uma mensagem de sucesso para ser exibida na página de lista após o redirecionamento.
+        attributes.addFlashAttribute("mensagem", "Receita salva com sucesso!");
+        return "redirect:/receitas/lista";
+    }
+
+    // Rota para deletar uma receita.
+    @GetMapping("/deletar/{id}")
+    public String deletar(@PathVariable Long id, RedirectAttributes attributes) {
+        receitaService.deletar(id);
+        
+        attributes.addFlashAttribute("mensagemErro", "Receita excluída!"); // Mensagem de aviso para o usuário após a exclusão.
+        return "redirect:/receitas/lista";
+    }
+
+    // Rota para adicionar um comentário a uma receita específica.
+    @PostMapping("/comentar/{id}")
+    public String adicionarComentario(@PathVariable("id") Long receitaId, 
+                                      @RequestParam("autorId") Long autorId, 
+                                      @RequestParam("texto") String texto) {
+        
+        // 1. Busca a receita e o usuário no banco
+        Receita receita = receitaRepository.findById(receitaId)
+                .orElseThrow(() -> new IllegalArgumentException("Receita inválida!"));
+        br.edu.iff.redesocial.entities.Usuario autor = usuarioRepository.findById(autorId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário inválido!"));
+        
+        // 2. Cria o comentário e conecta tudo
+        br.edu.iff.redesocial.entities.Comentario comentario = new br.edu.iff.redesocial.entities.Comentario();
+        comentario.setTexto(texto);
+        comentario.setReceita(receita);
+        comentario.setUsuario(autor);
+        
+        // 3. Salva no banco de dados
+        comentarioRepository.save(comentario);
+        
+        // 4. Recarrega a página de detalhes para mostrar o comentário novo
+        return "redirect:/receitas/detalhes/" + receitaId;
     }
 }

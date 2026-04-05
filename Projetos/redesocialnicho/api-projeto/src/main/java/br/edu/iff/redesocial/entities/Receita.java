@@ -3,6 +3,7 @@ package br.edu.iff.redesocial.entities;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Receita {
@@ -19,7 +20,7 @@ public class Receita {
     @Column(columnDefinition = "TEXT") // Define a coluna "passoApasso" como texto no BD, permitindo descrições detalhadas.
     private String passoApasso;
     
-    private LocalDateTime dataPostagem = LocalDateTime.now();
+    private LocalDateTime dataPostagem = LocalDateTime.now(); // Data e hora em que a receita foi postada, iniciada com o momento da criação.
     
     private float mediaAvaliacao = 0.0f; // Avaliação média da receita, iniciada com 0. Será atualizada conforme avaliações.
 
@@ -31,8 +32,12 @@ public class Receita {
     private List<ColecaoPessoal> colecoes; 
 
     @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true) 
-    // Uma receita pode ter muitos comentários. CascadeType.ALL garante que, ao deletar uma receita, os comentários tambem sejam.
-    private List<Avaliacao> avaliacoes;
+    private List<Avaliacao> avaliacoes = new ArrayList<>(); 
+    
+    // Uma receita pode ter muitos comentários.
+    // CascadeType.ALL garante que, ao deletar uma receita, os comentários também sejam removidos.
+    @OneToMany(mappedBy = "receita", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comentario> comentarios = new ArrayList<>();
 
     public void calcularMediaAval() {
         if (avaliacoes == null || avaliacoes.isEmpty()) {
@@ -70,4 +75,7 @@ public class Receita {
     public void setAutor(Usuario autor) { this.autor = autor; }
     
     public List<Avaliacao> getAvaliacoes() { return avaliacoes; }
+
+    public List<Comentario> getComentarios() { return comentarios; }
+    public void setComentarios(List<Comentario> comentarios) { this.comentarios = comentarios; }
 }

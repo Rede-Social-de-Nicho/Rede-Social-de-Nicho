@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Erro Interno')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+    <main>
+        <h1 style="color: #f44336; font-size: 50px;">500</h1>
+        <h2>Eita! Algo deu errado no nosso servidor.</h2>
+        <p>Nossos cozinheiros já foram avisados e estão limpando a bagunça na cozinha.</p>
+        <p style="color: #777; font-size: 12px;" th:text="${erroDetalhe}"></p>
+        <br>
+        <a th:href="@{/receitas/lista}" style="padding: 10px 20px; background-color: #f44336; color: white; text-decoration: none; border-radius: 5px;">Tentar Novamente</a>
+    </main>
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

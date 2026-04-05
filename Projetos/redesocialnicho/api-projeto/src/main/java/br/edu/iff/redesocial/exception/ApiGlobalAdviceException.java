@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class ApiGlobalAdviceException {
 
     // 1. Trata o erro 404 (Quando não acha o Usuário)
-    @ExceptionHandler(UsuarioNaoEncontradoException.class)
-    public ResponseEntity<Object> tratarUsuarioNaoEncontrado(UsuarioNaoEncontradoException ex) {
+    @ExceptionHandler(UsuarioNaoEncontradoException.class) // Indica que este método deve ser chamado quando uma exceção do tipo UsuarioNaoEncontradoException for lançada em qualquer controlador dentro do pacote "br.edu.iff.redesocial.controller".
+    public ResponseEntity<Object> tratarUsuarioNaoEncontrado(UsuarioNaoEncontradoException ex) { // Captura a exceção e constrói uma resposta personalizada para o cliente, contendo detalhes sobre o erro.
         
-        Map<String, Object> body = new LinkedHashMap<>();
+        Map<String, Object> body = new LinkedHashMap<>(); // Cria um mapa para armazenar os detalhes do erro, como timestamp, status, tipo de erro e mensagem.
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND.value());
         body.put("erro", "Recurso não encontrado");
@@ -32,15 +32,15 @@ public class ApiGlobalAdviceException {
     public ResponseEntity<List<ErroValidacaoDTO>> tratarErrosValidacao(MethodArgumentNotValidException ex) {
         
         List<ErroValidacaoDTO> erros = ex.getBindingResult().getFieldErrors()
-                .stream()
-                .map(erro -> new ErroValidacaoDTO(erro.getField(), erro.getDefaultMessage()))
-                .collect(Collectors.toList());
+                .stream() // Transforma a lista de erros de validação em um stream para processar cada erro individualmente.
+                .map(erro -> new ErroValidacaoDTO(erro.getField(), erro.getDefaultMessage())) // Mapeia cada erro de validação para um objeto ErroValidacaoDTO, que contém o nome do campo e a mensagem de erro correspondente.
+                .collect(Collectors.toList()); // Coleta os objetos ErroValidacaoDTO em uma lista para ser retornada na resposta.
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
     }
 
-    @ExceptionHandler(ReceitaNaoEncontradaException.class)
-    public ResponseEntity<Object> tratarReceitaNaoEncontrada(ReceitaNaoEncontradaException ex) {
+    @ExceptionHandler(ReceitaNaoEncontradaException.class) // Indica que este método deve ser chamado quando uma exceção do tipo ReceitaNaoEncontradaException for lançada em qualquer controlador dentro do pacote "br.edu.iff.redesocial.controller".
+    public ResponseEntity<Object> tratarReceitaNaoEncontrada(ReceitaNaoEncontradaException ex) { // Captura a exceção e constrói uma resposta personalizada para o cliente, contendo detalhes sobre o erro.
         
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

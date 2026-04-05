@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Nova Receita')}"></head>
+
+<body>
+    <header th:replace="~{fragments/layout :: cabecalho}"></header>
+
+    <main style="max-width: 600px; margin: 40px auto; padding: 30px; border: 1px solid #ff7e5f; border-radius: 10px; background-color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.05); box-sizing: border-box;">
+        
+        <h2 style="color: #ff7e5f; text-align: center; margin-bottom: 25px;">Cadastrar Nova Receita</h2>
+        
+        <form th:action="@{/receitas/salvar}" th:object="${receita}" method="post" style="display: flex; flex-direction: column; gap: 15px;">
+            
+            <input type="hidden" th:field="*{id}">
+
+            <div>
+                <label style="font-weight: bold; color: #555;">Título da Receita:</label><br>
+                <input type="text" th:field="*{titulo}" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #555;">Autor:</label><br>
+                <select name="autorId" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                    <option value="">Selecione o autor...</option>
+                    <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nomeUsuario}"></option>
+                </select>
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #555;">Ingredientes:</label><br>
+                <textarea th:field="*{ingredientes}" rows="5" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;" placeholder="Ex: 1 xícara de trigo..."></textarea>
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #555;">Modo de Preparo:</label><br>
+                <textarea th:field="*{passoApasso}" rows="5" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;" placeholder="Ex: Misture tudo e coloque no forno..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 20px; gap: 15px;">
+                <a th:href="@{/receitas/lista}" style="padding: 12px; background-color: #ccc; color: #333; text-decoration: none; border-radius: 5px; font-weight: bold; text-align: center; flex: 1;">Cancelar</a>
+                <button type="submit" style="background-color: #4CAF50; color: white; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; flex: 1;">Salvar Receita</button>
+            </div>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

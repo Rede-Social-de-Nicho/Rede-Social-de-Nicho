@@ -1,61 +1,66 @@
 package br.edu.iff.redesocial.controller;
 
-import br.edu.iff.redesocial.dto.UsuarioRequestDTO;
-import br.edu.iff.redesocial.exception.UsuarioNaoEncontradoException;
 import br.edu.iff.redesocial.entities.Usuario;
 import br.edu.iff.redesocial.repository.UsuarioRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/usuarios")
+@Controller 
+@RequestMapping("/usuarios") // Define a rota base para todas as ações relacionadas aos usuários. Todas as rotas dentro deste controlador começarão com "/usuarios".
 public class UsuarioController {
 
     @Autowired
     private UsuarioRepository repository;
 
-    // 1. Listar todos os usuários
-    @GetMapping
-    public List<Usuario> listarTodos() {
-        return repository.findAll();
+    // 1. Listar todos os usuários (Puxa o HTML da lista)
+    @GetMapping("/lista")
+    public String listarTodos(Model model) {
+        model.addAttribute("listaDeUsuarios", repository.findAll());
+        return "usuarios/lista";
     }
 
-    // 2. Buscar usuário específico por ID (Usa a nova exceção se não achar)
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+    // 2. Abre o formulário limpo para um NOVO usuário
+    @GetMapping("/novo")
+    public String exibirFormularioNovo(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "usuarios/formulario";
+    }
+
+    // 3. Abre o formulário preenchido para EDITAR um usuário
+    @GetMapping("/editar/{id}")
+    public String editarFormulario(@PathVariable Long id, Model model) {
+        // Usamos o IllegalArgumentException para o nosso GlobalExceptionHandler capturar
         Usuario usuario = repository.findById(id)
-            .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado com ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com ID: " + id));
         
-        return ResponseEntity.ok(usuario);
+        model.addAttribute("usuario", usuario);
+        return "usuarios/formulario";
     }
 
-    // 3. Criar novo usuário (Usa o DTO para validar @Email e @NotBlank)
-    @PostMapping
-    public ResponseEntity<Usuario> salvar(@Valid @RequestBody UsuarioRequestDTO dto) {
-        Usuario usuario = new Usuario();
-        usuario.setNomeUsuario(dto.nomeUsuario());
-        usuario.setEmail(dto.email());
-        usuario.setSenhaHash(dto.senhaHash());
-        usuario.seteAdm(dto.eAdm());
-
-        Usuario novoUsuario = repository.save(usuario);
+    // 4. Recebe os dados do formulário e salva (Criar ou Editar)
+    @PostMapping("/salvar")
+    public String salvar(@ModelAttribute Usuario usuario, RedirectAttributes attributes) {
+        repository.save(usuario);
         
-        return new ResponseEntity<>(novoUsuario, HttpStatus.CREATED);
+        // Mensagem de sucesso (Flash Attribute)
+        attributes.addFlashAttribute("mensagem", "Usuário salvo com sucesso!");
+        return "redirect:/usuarios/lista";
     }
 
-    // 4. Deletar usuário (Usa a nova exceção se o ID não existir)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    // 5. Deleta o usuário
+    @GetMapping("/deletar/{id}")
+    public String deletar(@PathVariable Long id, RedirectAttributes attributes) {
         if (!repository.existsById(id)) {
-            throw new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com ID " + id + " para exclusão.");
-        }
+            throw new IllegalArgumentException("Não foi possível encontrar o usuário para exclusão.");
+        } 
         
         repository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        
+        // Mensagem de exclusão (Flash Attribute)
+        attributes.addFlashAttribute("mensagemErro", "Usuário excluído!");
+        return "redirect:/usuarios/lista";
     }
 }
