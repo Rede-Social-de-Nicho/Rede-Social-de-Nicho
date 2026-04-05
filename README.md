@@ -25,6 +25,7 @@ Certifique-se de que a porta 8081 está disponível (configurada via application
 No terminal, execute:
 
 mvn spring-boot:run
+<img width="1918" height="952" alt="image" src="https://github.com/user-attachments/assets/93da5217-6bc1-4a04-89ce-561093eb3797" />
 
 
 📂 Estrutura do Projeto (Entidades)
