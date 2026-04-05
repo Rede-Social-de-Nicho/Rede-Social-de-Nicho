@@ -67,3 +67,4 @@ Siga os passos abaixo para rodar a aplicação localmente:
 
 ---
 Desenvolvido por Marvin e Emily
+Link da Release Final: https://github.com/Rede-Social-de-Nicho/Rede-Social-de-Nicho/releases/tag/v2.0.0-p2
